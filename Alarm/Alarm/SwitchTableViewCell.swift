@@ -9,6 +9,13 @@
 import UIKit
 
 class SwitchTableViewCell: UITableViewCell {
+
+    // MARK: - Properties
+    var alarm: Alarm? {
+        didSet {
+            updateViews()
+        }
+    }
     
     // MARK: - IBOutlets & IBActions
     
@@ -21,7 +28,15 @@ class SwitchTableViewCell: UITableViewCell {
         
     }
     
-    
+    func updateViews() {
+        
+        guard let alarm = alarm else { return }
+        
+        timeLabel.text = alarm.fireTimeAsString
+        nameLabel.text = alarm.name
+        alarmSwitch.isOn = alarm.enabled
+        
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -8,14 +8,22 @@
 
 import UIKit
 
-class SwitchTableViewCell: UITableViewCell {
+protocol SwitchTableViewCellDelegate: class {
+    
+    func switchCellSwitchValueChanged(alarm: Alarm, isOn: Bool)
+    
+}
 
+class SwitchTableViewCell: UITableViewCell {
+    
     // MARK: - Properties
     var alarm: Alarm? {
         didSet {
             updateViews()
         }
     }
+    
+    weak var delegate: SwitchTableViewCellDelegate?
     
     // MARK: - IBOutlets & IBActions
     
@@ -25,6 +33,9 @@ class SwitchTableViewCell: UITableViewCell {
     
     @IBAction func switchValueChanged(_ sender: Any) {
         
+        guard let alarm = alarm else { return }
+        
+        delegate?.switchCellSwitchValueChanged(alarm: alarm, isOn: alarm.enabled)
         
     }
     

@@ -8,12 +8,19 @@
 
 import UIKit
 
-class AlarmListTableViewController: UITableViewController {
+class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDelegate {
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+    }
+    
+    func switchCellSwitchValueChanged(alarm: Alarm, isOn: Bool) {
+        
+        AlarmController.shared.toggleEnabled(for: alarm)
+        tableView.reloadData()
+        
     }
 
 

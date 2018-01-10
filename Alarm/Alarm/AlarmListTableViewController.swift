@@ -10,17 +10,6 @@ import UIKit
 
 class AlarmListTableViewController: UITableViewController {
     
-    // MARK: - IBOutlets & IBActions
-    
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var alarmLabel: UILabel!
-    @IBOutlet weak var alarmSwitch: UISwitch!
-    
-    @IBAction func switchValueChanged(_ sender: Any) {
-        
-        
-    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -10,6 +10,13 @@ import UIKit
 
 class AlarmDetailTableViewController: UITableViewController {
     
+    // MARK: - Properties
+    var alarm: Alarm? {
+        didSet {
+            updateViews()
+        }
+    }
+    
     // MARK: - IBOutlets & IBActions
     
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -19,13 +26,41 @@ class AlarmDetailTableViewController: UITableViewController {
     @IBAction func enableButtonTapped(_ sender: Any) {
         
         
+        
     }
     
-    
+    func updateViews() {
+        
+        // Alarm exists
+        if let alarm = alarm {
+            
+            datePicker.date = alarm.fireDate!
+            alarmNameTextField.text = alarm.name
+            
+            if alarm.enabled {
+                
+                enableButton.setTitle("Disable", for: .normal)
+                enableButton.setTitleShadowColor(UIColor.red, for: .normal)
+                
+            } else {
+                
+                enableButton.setTitle("Enable", for: .normal)
+                enableButton.setTitleShadowColor(UIColor.green, for: .normal)
+            }
+            
+        } else {
+            
+            // alarm is nil - hide the enable/disable button
+            enableButton.isHidden = true
+            
+        }
+        
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        updateViews()
     }
 
 

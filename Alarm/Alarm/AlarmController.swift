@@ -17,8 +17,13 @@ class AlarmController {
     var alarms: [Alarm] = []
     
     // Mock data
-    var mockAlarms: [Alarm] = [Alarm(fireTimeFromMidnight: 600, name: "firstMock"),
-                               Alarm(fireTimeFromMidnight: 10000, name: "secondMock")]
+    var mockAlarms: [Alarm] {
+        return [Alarm(fireTimeFromMidnight: 890, name: "mockAlarm1"),
+                Alarm(fireTimeFromMidnight: 1234, name: "mockAlarm2"),
+                Alarm(fireTimeFromMidnight: 3333, name: "mockAlarm3", enabled: false),
+                Alarm(fireTimeFromMidnight: 4444, name: "mockAlarm4"),
+                Alarm(fireTimeFromMidnight: 5555, name: "mockAlarm5", enabled: false)]
+    }
     
     init() {
         

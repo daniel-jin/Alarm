@@ -32,10 +32,13 @@ class AlarmDetailTableViewController: UITableViewController {
     func updateViews() {
         
         // Alarm exists
-        if let alarm = alarm {
+        if let alarm = self.alarm,
+            let thisMorningAtMidnight = DateHelper.thisMorningAtMidnight {
             
-            datePicker.date = alarm.fireDate!
+            datePicker.setDate(Date(timeInterval: alarm.fireTimeFromMidnight, since: thisMorningAtMidnight), animated: false)
             alarmNameTextField.text = alarm.name
+            
+            enableButton.isHidden = false
             
             if alarm.enabled {
                 

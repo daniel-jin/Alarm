@@ -29,6 +29,8 @@ class AlarmController {
         
         self.alarms = self.mockAlarms
         
+        loadFromPersistantStore()
+        
     }
     
     // Creates an alarm, adds to the alarms array, returns the alarm
@@ -37,6 +39,8 @@ class AlarmController {
         let alarm = Alarm(fireTimeFromMidnight: fireTimeFromMidnight, name: name)
         
         alarms.append(alarm)
+        
+        saveToPersistantStore()
         
         return alarm
         
@@ -47,6 +51,8 @@ class AlarmController {
         
         alarm.fireTimeFromMidnight = fireTimeFromMidnight
         alarm.name = name
+        
+        saveToPersistantStore()
         
     }
     
@@ -59,12 +65,39 @@ class AlarmController {
             alarms.remove(at: index)
             
         }
+        
+        saveToPersistantStore()
     }
     
     func toggleEnabled(for alarm: Alarm) {
         
         alarm.enabled = !alarm.enabled
         
+        saveToPersistantStore()
+        
+    }
+    
+    // MARK: - Persistant store functions
+    
+    static private var persistentAlarmsFilePath: String? {
+        let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true)
+        guard let documentsDirectory = directories.first as NSString? else { return nil }
+        return documentsDirectory.appendingPathComponent("Alarms.plist")
+    }
+    
+    func saveToPersistantStore() {
+        
+        guard let persistentAlarmsFilePath = AlarmController.persistentAlarmsFilePath else { return }
+        
+        NSKeyedArchiver.archiveRootObject(alarms, toFile: persistentAlarmsFilePath)
+        
+    }
+    
+    func loadFromPersistantStore() {
+        
+        guard let persistentAlarmsFilePath = AlarmController.persistentAlarmsFilePath else { return }
+        
+        NSKeyedUnarchiver.unarchiveObject(withFile: persistentAlarmsFilePath)
     }
     
     

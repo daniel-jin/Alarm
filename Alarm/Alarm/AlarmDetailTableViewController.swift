@@ -29,33 +29,46 @@ class AlarmDetailTableViewController: UITableViewController {
         
     }
     
+    @IBAction func saveButtonTapped(_ sender: Any) {
+        
+        guard let alarmTitle = alarmNameTextField.text,
+            let thisMorningAtMidnight = DateHelper.thisMorningAtMidnight else { return }
+        
+        let timeInterval = datePicker.date.timeIntervalSince(thisMorningAtMidnight)
+        
+        // Alarm exists - update and save
+        if let alarm = alarm {
+            AlarmController.shared.update(alarm: alarm, fireTimeFromMidnight: timeInterval, name: alarmTitle)
+        } else {
+            // Alarm doesn't exist -- create new alarm
+            AlarmController.shared.addAlarm(fireTimeFromMidnight: timeInterval, name: alarmTitle)
+        }
+        
+        
+        
+        
+    }
+    
+    
     func updateViews() {
         
-        // Alarm exists
-        if let alarm = self.alarm,
-            let thisMorningAtMidnight = DateHelper.thisMorningAtMidnight {
+        if let alarm = self.alarm {
             
-            datePicker.setDate(Date(timeInterval: alarm.fireTimeFromMidnight, since: thisMorningAtMidnight), animated: false)
-            alarmNameTextField.text = alarm.name
+            alarmNameTextField?.text = alarm.name
             
-            enableButton.isHidden = false
+            datePicker.date = alarm.fireDate!
             
             if alarm.enabled {
-                
                 enableButton.setTitle("Disable", for: .normal)
                 enableButton.setTitleShadowColor(UIColor.red, for: .normal)
                 
             } else {
-                
                 enableButton.setTitle("Enable", for: .normal)
                 enableButton.setTitleShadowColor(UIColor.green, for: .normal)
             }
             
-        } else {
-            
-            // alarm is nil - hide the enable/disable button
+        } else { // if alarm is nil, hide enable/disable button
             enableButton.isHidden = true
-            
         }
         
     }
@@ -69,15 +82,15 @@ class AlarmDetailTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
+//    override func numberOfSections(in tableView: UITableView) -> Int {
+//        // #warning Incomplete implementation, return the number of sections
+//        return 0
+//    }
+//
+//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        // #warning Incomplete implementation, return the number of rows
+//        return 0
+//    }
 
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

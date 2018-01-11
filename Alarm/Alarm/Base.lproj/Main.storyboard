@@ -184,7 +184,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Title" id="NaY-QL-voG">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="QcK-gT-pLP"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="QcK-gT-pLP">
+                            <connections>
+                                <action selector="saveButtonTapped:" destination="5F2-D1-JDt" id="3ej-FI-m9I"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="alarmNameTextField" destination="qb3-cv-9ZK" id="nue-lz-Y9f"/>

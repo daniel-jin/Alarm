@@ -7,6 +7,46 @@
 //
 
 import Foundation
+import UserNotifications
+
+protocol AlarmScheduler: class {
+    
+    func scheduleUserNotifications(for alarm: Alarm)
+    func cancelUserNotifications(for alarm: Alarm)
+    
+}
+
+extension AlarmScheduler {
+    
+    func scheduleUserNotifications(for alarm: Alarm) {
+        
+        let notificationContent = UNMutableNotificationContent()
+        
+        notificationContent.title = "Get up"
+        notificationContent.body = "Open your eyes!"
+        notificationContent.sound = UNNotificationSound.default()
+        
+        guard let fireDate = alarm.fireDate else { return }
+        
+        let dateComponents = Calendar.current.dateComponents([.day, .hour, .minute], from: fireDate)
+        let dateTrigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let request = UNNotificationRequest(identifier: alarm.uuid, content: notificationContent, trigger: dateTrigger)
+        
+        UNUserNotificationCenter.current().add(request) { (error) in
+            if let error = error {
+                print("Unable to add notification request. \(error.localizedDescription)")
+            }
+        }
+        
+    }
+    
+    func cancelUserNotifications(for alarm: Alarm) {
+        
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [alarm.uuid])
+        
+    }
+    
+}
 
 class AlarmController {
     
@@ -99,7 +139,4 @@ class AlarmController {
         
         NSKeyedUnarchiver.unarchiveObject(withFile: persistentAlarmsFilePath)
     }
-    
-    
-    
 }

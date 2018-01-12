@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AlarmDetailTableViewController: UITableViewController {
+class AlarmDetailTableViewController: UITableViewController, AlarmScheduler {
     
     // MARK: - Properties
     var alarm: Alarm? {
@@ -25,7 +25,15 @@ class AlarmDetailTableViewController: UITableViewController {
     
     @IBAction func enableButtonTapped(_ sender: Any) {
         
+        guard let alarm = self.alarm else { return }
         
+        AlarmController.shared.toggleEnabled(for: alarm)
+        
+        if alarm.enabled {
+            scheduleUserNotifications(for: alarm)
+        } else {
+            cancelUserNotifications(for: alarm)
+        }
         
     }
     
@@ -38,10 +46,14 @@ class AlarmDetailTableViewController: UITableViewController {
         
         // Alarm exists - update and save
         if let alarm = alarm {
+            cancelUserNotifications(for: alarm)
             AlarmController.shared.update(alarm: alarm, fireTimeFromMidnight: timeInterval, name: alarmTitle)
+            scheduleUserNotifications(for: alarm)
         } else {
             // Alarm doesn't exist -- create new alarm
             AlarmController.shared.addAlarm(fireTimeFromMidnight: timeInterval, name: alarmTitle)
+            let newAlarm = Alarm(fireTimeFromMidnight: timeInterval, name: alarmTitle)
+            scheduleUserNotifications(for: newAlarm)
         }
         
         
